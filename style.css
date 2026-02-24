@@ -1,0 +1,147 @@
+:root {
+    --primary-blue: #1e3a8a;
+    --accent-blue: #3b82f6;
+    --dark-bg: #0f172a;
+    --light-bg: #f8fafc;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: var(--light-bg);
+    color: #334155;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-blue); }
+.nav-logo span { color: var(--accent-blue); }
+.nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; }
+.nav-links a { text-decoration: none; color: #475569; font-weight: 500; transition: 0.3s; }
+.nav-links a:hover { color: var(--accent-blue); }
+
+/* Hero */
+.hero {
+    background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9));
+    color: white;
+    padding: 100px 5%;
+    text-align: center;
+}
+
+.profile-pic {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    border: 4px solid var(--accent-blue);
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+}
+
+.hero-name { font-size: 3rem; margin: 0; }
+.hero-title { font-size: 1.5rem; color: var(--accent-blue); margin-bottom: 1rem; }
+.hero-tagline { max-width: 700px; margin: 0 auto 2rem; opacity: 0.9; }
+
+.btn {
+    padding: 12px 28px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.btn.primary { background: var(--accent-blue); color: white; margin-right: 15px; }
+.btn.secondary { border: 2px solid white; color: white; }
+
+/* Sections */
+section { padding: 80px 8%; }
+.section-title { text-align: center; margin-bottom: 3.5rem; font-size: 2.2rem; color: var(--primary-blue); font-weight: 700; }
+
+/* Skills Badges (Gray Bubbles) */
+.skills-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.skill-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    flex: 1 1 300px;
+    max-width: 400px;
+}
+
+.skill-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--primary-blue); }
+
+.skill-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.badge {
+    background: #f1f5f9;
+    color: #334e68;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Projects Grid */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.project-item {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+}
+
+.project-item:hover { transform: translateY(-10px); }
+
+.project-thumbnail {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.project-details { padding: 25px; }
+.project-details h4 { margin: 0 0 10px; color: var(--primary-blue); font-size: 1.3rem; }
+.project-meta { font-size: 0.9rem; margin-bottom: 5px; color: #64748b; }
+.project-tools { margin-top: 15px; font-weight: 700; color: var(--accent-blue); font-size: 0.85rem; }
+
+.project-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* Education & Contact */
+.edu-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.edu-item { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+.edu-meta { color: var(--accent-blue); font-weight: 600; }
+
+.contact { background: var(--dark-bg); color: white; text-align: center; padding: 60px 0; }
+.contact-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+.contact-links a { color: var(--accent-blue); text-decoration: none; font-weight: bold; }
+.footer-bottom { margin-top: 40px; opacity: 0.5; font-size: 0.8rem; }
