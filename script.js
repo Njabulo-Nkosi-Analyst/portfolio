@@ -1,17 +1,4 @@
-// Theme Toggle Logic
-const toggleSwitch = document.querySelector('#checkbox');
-const currentTheme = localStorage.getItem('theme') || 'dark';
-
-document.documentElement.setAttribute('data-theme', currentTheme);
-if (currentTheme === 'dark') { toggleSwitch.checked = true; }
-
-toggleSwitch.addEventListener('change', (e) => {
-    const theme = e.target.checked ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-});
-
-// Scroll Reveal Logic
+// Scroll Reveal Animation
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -21,3 +8,13 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Sticky Navbar Scroll Effect
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        nav.style.background = 'rgba(5, 5, 5, 0.95)';
+    } else {
+        nav.style.background = 'transparent';
+    }
+});
