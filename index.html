@@ -10,142 +10,184 @@
 </head>
 <body>
 
+    <div class="bg-glow-top"></div>
+    <div class="bg-glow-bottom"></div>
+
     <nav class="navbar">
-        <a href="#home" class="nav-logo">Njabulo <span>Nkosi</span></a>
+        <div class="nav-logo">Njabulo <span>Nkosi</span></div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
         </ul>
-        <div class="theme-switch-wrapper">
-            <span class="mode-label">Light</span>
-            <label class="theme-switch">
-                <input type="checkbox" id="checkbox" checked />
-                <div class="slider round"></div>
-            </label>
-            <span class="mode-label">Dark</span>
+        <div class="nav-actions">
+            <div class="theme-switch-wrapper">
+                <span>Light</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="checkbox" checked>
+                    <div class="slider round"></div>
+                </label>
+                <span>Dark</span>
+            </div>
+            <a href="mailto:NjabuloxNkosi12@gmail.com" class="contact-btn">Contact me</a>
         </div>
-        <a href="mailto:NjabuloxNkosi12@gmail.com" class="nav-contact-btn">Contact me</a>
     </nav>
 
     <div class="social-sidebar">
-        <a href="https://linkedin.com/in/njabulo-nkosi-949359325" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="https://github.com/Njabulo-Nkosi-Analyst" target="_blank"><i class="fa-brands fa-github"></i></a>
-        <a href="mailto:NjabuloxNkosi12@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://linkedin.com/in/njabulo-nkosi-949359325" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/Njabulo-Nkosi-Analyst" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="mailto:NjabuloxNkosi12@gmail.com"><i class="fas fa-envelope"></i></a>
     </div>
 
-    <header id="home" class="hero">
-        <div class="hero-container container">
-            <div class="hero-text">
-                <span class="hero-subtitle reveal">JUNIOR DATA ANALYST</span>
-                <h1 class="hero-name reveal">Njabulo<br>Nkosi</h1>
-                <p class="hero-tagline reveal">Transforming enterprise-level datasets into executive growth roadmaps using SQL, Python, Snowflake, and Power BI.</p>
-                <div class="cv-btns reveal">
-                    <a href="Njabulo_Nkosi_Data_Analyst_Resume.pdf" target="_blank" class="cv-circle-btn">
-                        <i class="fa-solid fa-arrow-down"></i>
-                        <span>CV</span>
-                    </a>
-                </div>
+    <header id="home" class="hero container">
+        <div class="hero-content">
+            <p class="hero-label reveal">JUNIOR DATA ANALYST</p>
+            <h1 class="hero-title reveal">Njabulo<br>Nkosi</h1>
+            <p class="hero-desc reveal">Transforming enterprise-level datasets into executive growth roadmaps using SQL, Python, Snowflake, and Power BI.</p>
+            <div class="hero-btns reveal">
+                <a href="Njabulo_Nkosi_Resume.pdf" class="cv-circle-btn">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>CV</span>
+                </a>
             </div>
-            <div class="hero-image-wrapper reveal">
-                <div class="glow-shape"></div>
-                <img src="profile.jpeg" alt="Njabulo Nkosi" class="main-profile-img">
-                <div class="floating-shape x-shape">×</div>
-                <div class="floating-shape plus-shape">+</div>
-                <div class="sphere-gradient sphere-1"></div>
-            </div>
+        </div>
+        <div class="hero-visual reveal">
+            <div class="image-orb"></div>
+            <img src="profile.jpeg" alt="Njabulo Nkosi" class="profile-img">
+            <span class="decor x-1">×</span>
+            <span class="decor x-2">×</span>
+            <div class="glass-sphere"></div>
         </div>
     </header>
 
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title reveal">Portfolio Projects</h2>
-            <div class="project-grid">
-                
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="Brightcar.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>AutoMobile Car Sales</h4>
-                        <p class="project-meta">Identified a 1,052% revenue surge and discovered the "Golden Asset Window".</p>
-                        <p class="project-tools">SQL • SSMS • Power BI • Miro</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_Car_Sales" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightBank.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>Banking Data Analysis</h4>
-                        <p class="project-meta">Discovered weekend profit losses; recommended Value-Based Bundling.</p>
-                        <p class="project-tools">SQL • Databricks • Power BI • Excel</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_bank" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightHospital.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>Healthcare Analytics</h4>
-                        <p class="project-meta">Reduced readmission rates (17.2%) for high-risk demographic groups.</p>
-                        <p class="project-tools">SQL • Databricks • Power BI • Miro</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright-Hospital" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightTv.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>TV Product Analytics</h4>
-                        <p class="project-meta">Identified a 62% growth surge and 52% preference for short-form content.</p>
-                        <p class="project-tools">SQL • Snowflake • Power BI • Canva</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_TV" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightShopping.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>Retail Shopping Trends</h4>
-                        <p class="project-meta">Segmented spenders to find Women (26-59) drive 65% of revenue.</p>
-                        <p class="project-tools">SQL • Snowflake • Power BI • Excel</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Shopping_Sales_Trends" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightCoffee.png" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>Coffee Sales Performance</h4>
-                        <p class="project-meta">Engineered Snowflake pipeline for 19K+ transactions; boosted peak visibility.</p>
-                        <p class="project-tools">SQL • Snowflake • Power BI • Excel</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Coffee-Shop-Sales-Analysis" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightPractical.jpg" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>SQL Practical</h4>
-                        <p class="project-meta">Advanced Joins, CTEs, and Cleaning across Snowflake and BigQuery.</p>
-                        <p class="project-tools">SQL • SSMS • Snowflake • BigQuery</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_-Practicals" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
-                <div class="project-item reveal">
-                    <div class="project-img-container"><img src="BrightExercise.jpg" class="project-thumbnail"></div>
-                    <div class="project-details">
-                        <h4>SQL Exercises</h4>
-                        <p class="project-meta">Technical repository focused on query optimization and data manipulation.</p>
-                        <p class="project-tools">SQL Fundamentals • Advanced Queries</p>
-                        <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright-Exercises" target="_blank" class="project-link">View Repo →</a>
-                    </div>
-                </div>
-
+    <section id="about" class="about container reveal">
+        <div class="section-header">
+            <h2>About <span>me</span></h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="about-grid">
+            <div class="about-image">
+                <img src="code-preview.png" alt="Data Analysis">
+            </div>
+            <div class="about-text">
+                <p>I am a Strategic Data Analyst specializing in high-stakes impact. I spearheaded the analysis of a $7.6B revenue portfolio, identifying 1,052% growth surges. I bridge the gap between SQL engineering and C-Suite storytelling to deliver "Golden Asset" insights.</p>
+                <a href="mailto:NjabuloxNkosi12@gmail.com" class="contact-btn-small">Contact me</a>
             </div>
         </div>
     </section>
+
+    <section id="skills" class="skills container reveal">
+        <div class="section-header">
+            <h2>My <span>skills</span></h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-group">
+                <div class="skill-bar"><span>Snowflake</span><div class="dots"><div class="fill" style="width:90%"></div></div></div>
+                <div class="skill-bar"><span>SQL (SSMS/BigQuery)</span><div class="dots"><div class="fill" style="width:95%"></div></div></div>
+                <div class="skill-bar"><span>Python</span><div class="dots"><div class="fill" style="width:80%"></div></div></div>
+                <div class="skill-bar"><span>Databricks</span><div class="dots"><div class="fill" style="width:85%"></div></div></div>
+            </div>
+            <div class="skill-group">
+                <div class="skill-bar"><span>Power BI</span><div class="dots"><div class="fill" style="width:95%"></div></div></div>
+                <div class="skill-bar"><span>Excel</span><div class="dots"><div class="fill" style="width:100%"></div></div></div>
+                <div class="skill-bar"><span>Figma/Miro</span><div class="dots"><div class="fill" style="width:75%"></div></div></div>
+                <div class="skill-bar"><span>ETL Processes</span><div class="dots"><div class="fill" style="width:90%"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects container">
+        <div class="section-header reveal">
+            <h2>My <span>projects</span></h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="project-grid">
+            <div class="project-card reveal">
+                <div class="p-img"><img src="Brightcar.png"></div>
+                <div class="p-content">
+                    <h3>AutoMobile Sales</h3>
+                    <p>Identified 1,052% revenue surge using SQL & Power BI.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_Car_Sales" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightBank.png"></div>
+                <div class="p-content">
+                    <h3>Banking Analysis</h3>
+                    <p>Weekend profit loss recovery and Value-Based Bundling.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_bank" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightHospital.png"></div>
+                <div class="p-content">
+                    <h3>Healthcare Analytics</h3>
+                    <p>17.2% reduction in patient readmission rates.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright-Hospital" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightTv.png"></div>
+                <div class="p-content">
+                    <h3>TV Product Analysis</h3>
+                    <p>62% growth surge identified in viewership trends.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_TV" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightShopping.png"></div>
+                <div class="p-content">
+                    <h3>Retail Shopping</h3>
+                    <p>Segmented personas driving 65% of total revenue.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Shopping_Sales_Trends" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightCoffee.png"></div>
+                <div class="p-content">
+                    <h3>Coffee Sales</h3>
+                    <p>Engineered Snowflake pipeline for 19K+ transactions.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Coffee-Shop-Sales-Analysis" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightPractical.jpg"></div>
+                <div class="p-content">
+                    <h3>SQL Practical</h3>
+                    <p>Advanced CTEs and Joins across BigQuery & Snowflake.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_-Practicals" target="_blank">View Repo →</a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="p-img"><img src="BrightExercise.jpg"></div>
+                <div class="p-content">
+                    <h3>SQL Exercises</h3>
+                    <p>Technical repository for practicing complex data manipulation.</p>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright-Exercises" target="_blank">View Repo →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="education container reveal">
+        <div class="section-header">
+            <h2>Edu<span>cation</span></h2>
+            <div class="header-line"></div>
+        </div>
+        <div class="edu-card">
+            <h3>Google Data Analytics Professional Certificate</h3>
+            <p>Coursera | 2023</p>
+            <div class="edu-divider"></div>
+            <h3>National Senior Certificate</h3>
+            <p>Wallmansthal Secondary School | 2020</p>
+        </div>
+    </section>
+
+    <footer class="footer container">
+        <p>© 2026 Njabulo Nkosi | Pretoria, South Africa</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
