@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Njabulo Nkosi | Strategic Data Analyst</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="main-glow-1"></div>
+    <div class="main-glow-2"></div>
+
+    <nav class="navbar">
+        <div class="nav-logo">Njabulo| <span>Nkosi</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="theme-toggle-li">
+                <div class="mode-toggle-wrapper">
+                    <i class="fas fa-moon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fas fa-sun"></i>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero section-spacing">
+        <div class="profile-container">
+            <img src="profile.jpeg" alt="Njabulo Nkosi" class="profile-pic">
+        </div>
+        <h1 class="hero-name">Njabulo Nkosi</h1>
+        <p class="hero-title">Junior Data Analyst</p>
+        <p class="hero-tagline">Transforming messy data into executive-ready insights using SQL, Python, Snowflake, SSMS, Databricks, and Power BI.</p>
+        <div class="hero-btns">
+            <a href="#projects" class="btn primary">View My Projects</a>
+            <a href="Njabulo_Nkosi_Resume.pdf" download="Njabulo_Nkosi_Resume" class="btn secondary">
+                <i class="fas fa-download"></i> Download Resume
+            </a>
+        </div>
+    </header>
+
+    <section id="about" class="container section-spacing">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-card glass-morph">
+            <p>I am a Strategic Data Analyst who transforms enterprise-level datasets into executive growth roadmaps. My track record is defined by high-stakes impact: most recently, I spearheaded the analysis of a $7.6B revenue portfolio within the Automotive sector, where I identified massive 1,052% growth surges.</p>
+        </div>
+    </section>
+
+    <section id="skills" class="container section-spacing">
+        <h2 class="section-title">Technical Mastery</h2>
+        <div class="skills-wrapper">
+            <div class="skill-card glass-morph">
+                <div class="skill-card-header"><i class="fas fa-database skill-main-icon"></i><h3>Databases</h3></div>
+                <div class="skill-badges">
+                    <span class="badge"><i class="fas fa-snowflake"></i> Snowflake</span>
+                    <span class="badge"><i class="fas fa-server"></i> MS SQL</span>
+                    <span class="badge"><i class="fab fa-google"></i> BigQuery</span>
+                    <span class="badge"><i class="fas fa-cloud"></i> Databricks</span>
+                </div>
+            </div>
+            <div class="skill-card glass-morph">
+                <div class="skill-card-header"><i class="fas fa-chart-pie skill-main-icon"></i><h3>Visualization</h3></div>
+                <div class="skill-badges">
+                    <span class="badge"><i class="fas fa-chart-line"></i> Power BI</span>
+                    <span class="badge"><i class="fas fa-file-excel"></i> Excel</span>
+                    <span class="badge"><i class="fas fa-palette"></i> Canva</span>
+                </div>
+            </div>
+            <div class="skill-card glass-morph">
+                <div class="skill-card-header"><i class="fas fa-project-diagram skill-main-icon"></i><h3>Strategy</h3></div>
+                <div class="skill-badges">
+                    <span class="badge"><i class="fab fa-figma"></i> Figma</span>
+                    <span class="badge"><i class="fas fa-sitemap"></i> Miro</span>
+                    <span class="badge"><i class="fas fa-broom"></i> Data Cleaning</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="container section-spacing">
+        <h2 class="section-title">Portfolio Projects</h2>
+        <div class="project-grid">
+            
+            <div class="project-item glass-morph">
+                <img src="Brightcar.png" class="project-thumbnail" alt="Car Sales">
+                <div class="project-details">
+                    <h4>AutoMobile Car Sales</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">Optimizing a $7.6B inventory roadmap.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">SQL ETL to analyze vehicle age and demand patterns.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Identified 1,052% revenue growth window.</p></div>
+                    </div>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_Car_Sales" target="_blank" class="project-link">View Repo →</a>
+                </div>
+            </div>
+
+            <div class="project-item glass-morph">
+                <img src="BrightShopping.png" class="project-thumbnail" alt="Shopping Trends">
+                <div class="project-details">
+                    <h4>Online Shopping Trends</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">High abandonment rate during checkout.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">Analyzed user funnel data using Python and SQL.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Proposed UI changes that recovered 12% in sales.</p></div>
+                    </div>
+                    <a href="#" class="project-link">View Repo →</a>
+                </div>
+            </div>
+
+            <div class="project-item glass-morph">
+                <img src="BrightHospital.png" class="project-thumbnail" alt="Hospital Analysis">
+                <div class="project-details">
+                    <h4>Hospital ER Analysis</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">Patient overflow during specific weekend hours.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">Visualized peak admission times in Power BI.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Staffing reallocation reduced wait times by 20%.</p></div>
+                    </div>
+                    <a href="#" class="project-link">View Repo →</a>
+                </div>
+            </div>
+
+            <div class="project-item glass-morph">
+                <img src="BrightTv.png" class="project-thumbnail" alt="TV Marketing">
+                <div class="project-details">
+                    <h4>TV Marketing ROI</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">Inefficient ad spend on low-performing slots.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">Joined viewership data in Snowflake.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Optimized budget to increase ROI by 15%.</p></div>
+                    </div>
+                    <a href="#" class="project-link">View Repo →</a>
+                </div>
+            </div>
+
+            <div class="project-item glass-morph">
+                <img src="BrightBank.png" class="project-thumbnail" alt="SQL Mastery">
+                <div class="project-details">
+                    <h4>SQL Query Mastery</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">Complex database reporting was taking hours.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">Refined queries using Window Functions and CTEs.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Report generation speed improved by 60%.</p></div>
+                    </div>
+                    <a href="#" class="project-link">View Repo →</a>
+                </div>
+            </div>
+
+            <div class="project-item glass-morph">
+                <img src="BrightCoffee.png" class="project-thumbnail" alt="Inventory">
+                <div class="project-details">
+                    <h4>Inventory Optimization</h4>
+                    <div class="par-hover-container">
+                        <div class="par-box"><span class="par-label">PROBLEM</span><p class="par-text">Excessive warehouse costs for slow stock.</p></div>
+                        <div class="par-box"><span class="par-label">ACTION</span><p class="par-text">Built a stock-ageing model in Excel and SQL.</p></div>
+                        <div class="par-box"><span class="par-label">RESULT</span><p class="par-text">Reduced holding costs by R450k annually.</p></div>
+                    </div>
+                    <a href="#" class="project-link">View Repo →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" class="container section-spacing">
+        <h2 class="section-title">Education</h2>
+        <div class="edu-card glass-morph">
+            <div class="edu-item">
+                <h3>Google Data Analytics Professional Certificate</h3>
+                <p class="edu-meta">Coursera | 2023</p>
+            </div>
+            <div class="edu-item" style="margin-top: 20px;">
+                <h3>National Senior Certificate</h3>
+                <p class="edu-meta">Wallmansthal Secondary School (2020)</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="contact section-spacing">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div class="contact-card glass-morph" style="text-align: center;">
+                <p>Location: Pretoria, Gauteng</p>
+                <div class="contact-links" style="margin: 20px 0;">
+                    <a href="mailto:NjabuloxNkosi12@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+                    <a href="https://linkedin.com/in/njabulo-nkosi-949359325" target="_blank" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Njabulo-Nkosi-Analyst" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
+                </div>
+                <p class="footer-bottom">© 2026 Njabulo Nkosi</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
