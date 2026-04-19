@@ -62,39 +62,40 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.add('reveal');
         observer.observe(el);
     });
-});// 4. SUPABASE AUTH & DATA FETCHING
+// 4. SUPABASE AUTH & DATA FETCHING
 const loginBtn = document.querySelector('#login-btn');
+const userGreeting = document.querySelector('#user-greeting');
 
-// This function checks if the user is logged in
-const checkUser = async () => {
+const handleAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
+
     if (user) {
-        loginBtn.innerHTML = `Logout (${user.user_metadata.full_name || 'User'})`;
+        // 1. Show the greeting
+        const name = user.user_metadata.full_name || 'User';
+        userGreeting.innerText = `Hi, ${name}`;
+        userGreeting.style.display = 'inline-block'; // Make it visible
+
+        // 2. Set button to Logout
+        loginBtn.innerHTML = 'Logout';
         loginBtn.onclick = async () => {
             await supabase.auth.signOut();
             window.location.reload();
         };
     } else {
+        // 1. Hide the greeting
+        userGreeting.style.display = 'none';
+
+        // 2. Set button to Sign In
+        loginBtn.innerHTML = 'Sign In';
         loginBtn.onclick = async () => {
-            await supabase.auth.signInWithOAuth({
+            const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'github',
                 options: { redirectTo: window.location.origin }
             });
+            if (error) console.error("Login Error:", error.message);
         };
     }
 };
 
-checkUser();
-const loginBtn = document.querySelector('#login-btn');
-
-loginBtn.addEventListener('click', async () => {
-    // This tells Supabase to open the GitHub login window
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-            redirectTo: window.location.origin
-        }
-    });
-    
-    if (error) console.error("Login Error:", error.message);
+handleAuth();
 });
