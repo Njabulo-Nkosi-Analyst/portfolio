@@ -62,4 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.add('reveal');
         observer.observe(el);
     });
+});// 4. SUPABASE AUTH & DATA FETCHING
+const loginBtn = document.querySelector('#login-btn');
+
+// This function checks if the user is logged in
+const checkUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        loginBtn.innerHTML = `Logout (${user.user_metadata.full_name || 'User'})`;
+        loginBtn.onclick = async () => {
+            await supabase.auth.signOut();
+            window.location.reload();
+        };
+    } else {
+        loginBtn.onclick = async () => {
+            await supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: { redirectTo: window.location.origin }
+            });
+        };
+    }
+};
+
+checkUser();
+const loginBtn = document.querySelector('#login-btn');
+
+loginBtn.addEventListener('click', async () => {
+    // This tells Supabase to open the GitHub login window
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+            redirectTo: window.location.origin
+        }
+    });
+    
+    if (error) console.error("Login Error:", error.message);
 });
