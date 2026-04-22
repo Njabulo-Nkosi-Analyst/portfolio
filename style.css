@@ -89,8 +89,13 @@ body {
 .skill-badges { display: flex; flex-wrap: wrap; gap: 10px; }
 .badge { background: rgba(188, 19, 254, 0.1); color: var(--primary-purple); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(188, 19, 254, 0.2); }
 
-.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
-.project-item { transition: 0.4s ease; display: flex; flex-direction: column; }
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;/* ADD THESE TWO LINES */
+    justify-content: center; 
+    align-items: start; }
+.project-item { transition: 0.4s ease; display: flex; flex-direction: column;height: 100%; 
+    background: var(--glass-bg); /* Ensure your background is applied */
+    border-radius: 16px;
+    overflow: hidden; }
 .project-thumbnail { width: 100%; height: 220px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--glass-border); }
 .par-box { padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 .par-label { font-size: 0.7rem; font-weight: 800; color: var(--primary-purple); display: block; text-transform: uppercase; }
@@ -155,4 +160,553 @@ input:checked + .slider:before { transform: translateX(22px); }
     font-weight: 400;
     letter-spacing: 0.5px;
     text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+#logout-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#logout-btn:hover {
+    background: rgba(255, 71, 71, 0.2); /* Slight red tint on hover */
+    border-color: #ff4747;
+}/* =========================================
+   1. GLOBAL & LAYOUT RESET
+   ========================================= */
+.login-page-body {
+    background-color: #000;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Subtle Data Grid Texture Overlay */
+.login-page-body::after {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.split-layout {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 10%;
+    z-index: 10;
+}
+
+/* =========================================
+   2. ANIMATED BACKGROUND BLOBS
+   ========================================= */
+@keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+.blob-bg {
+    position: absolute;
+    width: 550px;
+    height: 550px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.35;
+    z-index: 1;
+}
+
+.purple-blob { 
+    background: #6a1b9a; 
+    top: -100px; 
+    right: -50px; 
+    animation: drift 10s infinite ease-in-out;
+}
+
+.green-blob { 
+    background: #1b5e20; 
+    bottom: -100px; 
+    left: -50px; 
+    animation: drift 10s infinite ease-in-out reverse;
+}
+
+/* =========================================
+   3. ENTRANCE ANIMATIONS
+   ========================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 30;
+        transform: translateY(1px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome-section {
+    max-width: 500px;
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.login-section {
+    animation: fadeInUp 1s ease-out 0.2s forwards;
+    opacity: 0; /* Ensures it stays hidden until the animation starts */
+}
+
+/* =========================================
+   4. TEXT STYLING (Left Side)
+   ========================================= */
+.welcome-title {
+    font-size: 4.5rem;
+    color: white;
+    margin-bottom: 20px;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.welcome-text {
+    color: #999;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   5. BUTTON STYLING
+   ========================================= */
+/* Pulse Animation for the Main Action */
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(106, 27, 154, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(106, 27, 154, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(106, 27, 154, 0); }
+}
+
+/* GitHub Button */
+.btn-primary {
+    background: #6a1b9a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulseGlow 2s infinite;
+}
+
+.btn-primary:hover {
+    background: #8e24aa;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Free Version Button */
+.skip-now-btn {
+    background: linear-gradient(135deg, #4a148c, #311b92);
+    color: white;
+    border: none;
+    padding: 16px 45px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.skip-now-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(74, 20, 140, 0.5);
+}
+
+/* =========================================
+   6. LOGIN CONTAINER (Glassmorphism)
+   ========================================= */
+.login-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    padding: 3.5rem;
+    border-radius: 30px;
+    width: 400px;
+    text-align: center;
+    transition: border-color 0.4s ease, transform 0.4s ease;
+}
+
+.login-container:hover {
+    border-color: rgba(106, 27, 154, 0.5);
+    transform: perspective(1000px) rotateX(1deg) rotateY(1deg);
+}
+
+/* Responsive Fix for Mobile */
+@media (max-width: 900px) {
+    .split-layout {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 50px;
+    }
+    .welcome-section {
+        margin-bottom: 50px;
+    }
+    .welcome-title {
+        font-size: 3rem;
+    }
+}
+.stat-badges {
+    display: flex;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.stat-pill {
+    background: rgba(142, 36, 170, 0.1);
+    border: 1px solid rgba(142, 36, 170, 0.3);
+    padding: 10px 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.stat-number {
+    display: block;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.stat-label {
+    color: #8e24aa;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.verified-badge {
+    background: rgba(0, 200, 83, 0.1);
+    color: #00c853;
+    font-size: 0.75rem;
+    padding: 6px 15px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(0, 200, 83, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Curiosity Hook Styling */
+.expect-list {
+    margin: 30px 0 45px 0;
+    text-align: left;
+}
+
+.expect-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+    color: #bbb;
+    font-size: 0.95rem;
+}
+
+.expect-item i {
+    color: #8e24aa;
+    font-size: 1.2rem;
+    margin-top: 3px;
+}
+
+.expect-item strong {
+    color: white;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* Small Icon on top of the login box */
+.lock-icon-top {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+}
+/* --- A. THE PRO LABEL (Section Headers) --- */
+.pro-label {
+    color: #8e24aa;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* --- B. METRICS GRID (The Data Dashboard Look) --- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+}
+
+.metric-card:hover {
+    border-color: rgba(142, 36, 170, 0.5);
+    background: rgba(142, 36, 170, 0.05);
+    transform: translateY(-5px);
+}
+
+.m-value { 
+    display: block; 
+    color: #fff; 
+    font-size: 1.8rem; 
+    font-weight: 800; 
+    line-height: 1.2;
+}
+
+.m-label { 
+    color: #777; 
+    font-size: 0.75rem; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- C. TECH TAGS (Modern Skill Pills) --- */
+.tech-stack-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.tech-tag {
+    background: rgba(255, 255, 255, 0.03);
+    color: #eee;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.tech-tag i {
+    color: #8e24aa;
+}
+
+.tech-tag:hover {
+    background: #8e24aa;
+    color: white;
+    border-color: #8e24aa;
+}
+
+.tech-tag:hover i {
+    color: white;
+}
+
+/* --- D. BIO SUMMARY (The Experience Sidebar) --- */
+.bio-summary {
+    background: linear-gradient(90deg, rgba(142, 36, 170, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+    padding: 25px;
+    border-radius: 16px;
+    border-left: 4px solid #8e24aa;
+}
+
+.bio-line {
+    color: #bbb;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    display: flex;
+    justify-content:间隙;
+}
+
+.bio-line strong { 
+    color: #fff; 
+    margin-right: 10px; 
+    min-width: 100px;
+}
+
+/* --- E. FEATURE LIST --- */
+.pro-feature-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.p-item { 
+    color: #aaa; 
+    font-size: 0.9rem; 
+    display: flex; 
+    gap: 12px; 
+    align-items: center; 
+}
+
+.p-item i { 
+    color: #8e24aa; 
+    font-size: 1rem; 
+}
+/* =========================================
+   A. GLOBAL STYLES (Applies to all pages)
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* This keeps the website from sliding left/right on mobile */
+html, body {
+    width: 100%;
+    overflow-x: hidden; 
+}
+
+/* =========================================
+   B. LOGIN PAGE WRAPPER (The "Perfect Fit")
+   ========================================= */
+body.login-page-body {
+    background-color: #000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* This is the section you were looking for */
+/* Ensure the wrapper takes up the full viewport correctly */
+.main-content-wrapper {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px 8%;
+    position: relative;
+    z-index: 10;
+}
+
+/* This is the container that keeps Left and Right separated */
+.split-layout {
+    display: flex;
+    flex-direction: row; /* Forces side-by-side on laptop */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1250px;
+    gap: 60px;
+}
+
+/* Left Section: Welcome & Stats */
+.welcome-section {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Keeps everything left-aligned */
+}
+
+/* Right Section: The Login Box */
+.login-section {
+    flex: 0 0 420px; /* Gives the login box a fixed, solid width */
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Fix the "Explore" button positioning */
+.skip-now-btn {
+    margin-top: 30px; /* Gives it breathing room below the slider dots */
+    align-self: flex-start; 
+}
+/* =========================================
+   C. THE PROFESSIONAL SLIDER (The "Dots" Section)
+   ========================================= */
+.achievements-slider {
+    position: relative;
+    min-height: 250px; /* Prevents layout jumping */
+    width: 100%;
+    max-width: 550px;
+}
+
+.achievement-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateX(30px); /* Slides in from right */
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.achievement-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    position: relative;
+}
+
+/* Dot Progress Indicators */
+.slider-dots {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.dot.active {
+    width: 30px; /* Modern "Pill" shape for active dot */
+    background: #8e24aa;
+}
+
+/* =========================================
+   D. MOBILE RESPONSIVENESS (Laptop & Phone)
+   ========================================= */
+@media (max-width: 1100px) {
+    .split-layout {
+        flex-direction: column;
+        text-align: center;
+        gap: 60px;
+        padding-top: 100px; /* Space for navbar */
+    }
+
+    .welcome-title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+    }
+
+    .achievements-slider, .slider-dots {
+        margin: 0 auto;
+        justify-content: center;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 450px;
+    }
 }

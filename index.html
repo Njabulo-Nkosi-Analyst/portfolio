@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,35 +14,35 @@
     <div class="main-glow-2"></div>
 
     <nav class="navbar">
-    <div class="nav-logo">Njabulo | <span>Nkosi</span></div>
-    <div class="menu-toggle" id="mobile-menu">
-        <i class="fas fa-bars"></i>
-    </div>
-    <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#contact">Contact</a></li>
-        
-        <li class="auth-item">
-            <button id="login-btn" class="glass-btn">Sign In</button>
-            <span id="user-greeting" style="color: #00d2ff; font-size: 0.8rem; display: none; margin-left: 8px; vertical-align: middle;"></span>
-        </li>
-        
-        <li class="theme-toggle-li">
-            <div class="mode-toggle-wrapper">
-                <i class="fas fa-moon"></i>
-                <label class="switch">
-                    <input type="checkbox" id="checkbox">
-                    <span class="slider round"></span>
-                </label>
-                <i class="fas fa-sun"></i>
-            </div>
-        </li>
-    </ul>
-</nav>
+        <div class="nav-logo">Njabulo | <span>Nkosi</span></div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+           <li class="auth-item">
+        <span id="user-greeting" style="color: #00d2ff; font-size: 0.8rem; display: none; margin-left: 8px; vertical-align: middle;"></span>
+        <button id="logout-btn" class="glass-btn">Logout</button>
+    </li>
+    <li class="theme-toggle-li"> </li>
+
+            <li class="theme-toggle-li">
+                <div class="mode-toggle-wrapper">
+                    <i class="fas fa-moon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fas fa-sun"></i>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
     <header id="home" class="hero section-spacing">
         <div class="profile-container">
@@ -99,10 +100,11 @@
         </div>
     </section>
 
-    <section id="projects" class="container section-spacing">
-        <h2 class="section-title">Portfolio Projects</h2>
-        <div class="project-grid">
-            <div class="project-item glass-morph">
+   <section id="projects" class="container section-spacing">
+    <h2 class="section-title">Portfolio Projects</h2>
+    <div id="projects-container" class="project-grid">
+           
+        <div id="AutoMobile Car Sales" class="project-item glass-morph">
                 <img src="Brightcar.png" class="project-thumbnail" alt="Car Sales">
                 <div class="project-details">
                     <h4>AutoMobile Car Sales</h4>
@@ -115,7 +117,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_Car_Sales" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+            <div id = "Banking Data Analysis" class="project-item glass-morph">
                 <img src="BrightBank.png" class="project-thumbnail" alt="Banking">
                 <div class="project-details">
                     <h4>Banking Data Analysis</h4>
@@ -128,7 +130,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_bank" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+            <div id="Healthcare Analytics" class="project-item glass-morph">
                 <img src="BrightHospital.png" class="project-thumbnail" alt="Healthcare">
                 <div class="project-details">
                     <h4>Healthcare Analytics</h4>
@@ -141,7 +143,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright-Hospital" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+            <div id="TV Product Analytics" class="project-item glass-morph private-project">
                 <img src="BrightTv.png" class="project-thumbnail" alt="TV">
                 <div class="project-details">
                     <h4>TV Product Analytics</h4>
@@ -154,7 +156,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_TV" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+             <div id="Retail Shopping Trends" class="project-item glass-morph private-project">
                 <img src="BrightShopping.png" class="project-thumbnail" alt="Shopping">
                 <div class="project-details">
                     <h4>Retail Shopping Trends</h4>
@@ -167,7 +169,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Shopping_Sales_Trends" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+           <div id="Coffee Sales Performance" class="project-item glass-morph private-project">
                 <img src="BrightCoffee.png" class="project-thumbnail" alt="Coffee">
                 <div class="project-details">
                     <h4>Coffee Sales Performance</h4>
@@ -180,7 +182,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Coffee-Shop-Sales-Analysis" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+            <div id="SQL Practical" class="project-item glass-morph private-project">
                 <img src="BrightPractical.jpg" class="project-thumbnail" alt="Practical">
                 <div class="project-details">
                     <h4>SQL Practical</h4>
@@ -191,7 +193,7 @@
                     <a href="https://github.com/Njabulo-Nkosi-Analyst/Bright_-Practicals" target="_blank" class="project-link">View Repo →</a>
                 </div>
             </div>
-            <div class="project-item glass-morph">
+            <div id="SQL Exercises" class="project-item glass-morph private-project" >
                 <img src="BrightExercise.jpg" class="project-thumbnail" alt="Exercise">
                 <div class="project-details">
                     <h4>SQL Exercises</h4>
@@ -234,16 +236,7 @@
             <p class="footer-legal">© 2026 Njabulo Nkosi | Pretoria, South Africa</p>
         </div>
     </footer>
-
-   <li class="auth-item">
-        <button id="login-btn" class="glass-btn">Sign In</button>
-        <span id="user-greeting" style="color: #00d2ff; font-size: 0.8rem; display: none; margin-left: 8px; vertical-align: middle;"></span>
-    </li>
-    <li class="theme-toggle-li"> </li>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script src="script.js"></script>
+  
+  <script type="module" src="/script.js"></script>  
 </body>
 </html>
-

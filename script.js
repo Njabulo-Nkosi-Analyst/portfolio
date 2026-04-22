@@ -1,20 +1,8 @@
-// ==========================================
-// 0. SUPABASE CONFIGURATION (ADD YOUR KEYS HERE)
-// ==========================================
-// Go to Supabase -> Settings -> API to find these
-// 1. The URL you just found
-const supabaseUrl = 'https://tafkbiwvzewddlkocysq.supabase.co'; 
-
-// 2. The Key you copied from the "Publishable key" section in your screenshot
-const supabaseKey = 'sb_publishable_0ZB23W5Ni4cogAzKpd5Uyg_R38i_KAP';
-                      
-// 3. This line creates the "Bridge" to your database
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-// --- Your existing document.addEventListener starts below this line ---
+import { supabase } from './supabaseClient.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. MOBILE MENU
+    
+    // --- 1. MOBILE MENU ---
     const menuToggle = document.querySelector('#mobile-menu');
     const navLinks = document.querySelector('.nav-links');
 
@@ -29,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Close menu when clicking a link
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             if (navLinks) navLinks.classList.remove('active');
@@ -40,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. THEME TOGGLE
+  
+    // --- 2. THEME TOGGLE (Light/Dark) ---
     const toggleSwitch = document.querySelector('#checkbox');
     const currentTheme = localStorage.getItem('theme');
 
@@ -59,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. SCROLL REVEAL
+    // --- 3. SCROLL REVEAL ANIMATION ---
     const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -69,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
+    // Inject Reveal CSS styles
     const style = document.createElement('style');
     style.innerHTML = `
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
@@ -76,50 +67,109 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
+    // Apply reveal class to items
     document.querySelectorAll('section, .project-item, .skill-card').forEach(el => {
         el.classList.add('reveal');
         observer.observe(el);
     });
 
-    // 4. SUPABASE AUTH & DATA FETCHING
-    const loginBtn = document.querySelector('#login-btn');
-    const userGreeting = document.querySelector('#user-greeting');
+    // --- 4. SECURITY & ACCESS LOGIC ---
+    async function checkAccess() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const isGuest = localStorage.getItem('accessMode') === 'guest';
+        const path = window.location.pathname;
 
-    const handleAuth = async () => {
-        // This check works now because 'supabase' is defined at the top
-        const { data: { user } } = await supabase.auth.getUser();
+        // Redirect to login if no access
+        if (!session && !isGuest && !path.includes('login.html')) {
+            window.location.href = 'login.html';
+            return;
+        }
 
-        if (user) {
-            // Logged In State
-            const name = user.user_metadata.full_name || 'User';
-            if (userGreeting) {
-                userGreeting.innerText = `Hi, ${name}`;
-                userGreeting.style.display = 'inline-block';
-            }
+        // Project Visibility (index.html only)
+        if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
+            const privateProjects = document.querySelectorAll('.private-project');
+            const greeting = document.getElementById('user-greeting');
 
-            if (loginBtn) {
-                loginBtn.innerHTML = 'Logout';
-                loginBtn.onclick = async () => {
-                    await supabase.auth.signOut();
-                    window.location.reload();
-                };
-            }
-        } else {
-            // Logged Out State
-            if (userGreeting) userGreeting.style.display = 'none';
-            
-            if (loginBtn) {
-                loginBtn.innerHTML = 'Sign In';
-                loginBtn.onclick = async () => {
-                    const { error } = await supabase.auth.signInWithOAuth({
-                        provider: 'github',
-                        options: { redirectTo: window.location.origin }
-                    });
-                    if (error) console.error("Login Error:", error.message);
-                };
+            if (session) {
+                // Member State
+                privateProjects.forEach(p => p.style.display = 'block');
+                if (greeting) {
+                    const name = session.user.user_metadata.full_name || 'Member';
+                    greeting.innerText = `Hi, ${name}`;
+                    greeting.style.display = 'inline-block';
+                }
+            } else {
+                // Guest State
+                privateProjects.forEach(p => p.style.display = 'none');
+                if (greeting) greeting.style.display = 'none';
             }
         }
-    };
+    }
 
-    handleAuth();
+    // --- 5. BUTTON LISTENERS ---
+    
+    // Login Button (GitHub)
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            localStorage.removeItem('accessMode'); // Clear guest flag
+            await supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: { redirectTo: window.location.origin + '/index.html',
+                    queryParams: {
+                    prompt: 'select_account'}
+                 }
+            });
+        });
+    }
+
+    // Guest Button
+    const guestBtn = document.getElementById('guest-btn');
+    if (guestBtn) {
+        guestBtn.addEventListener('click', () => {
+            localStorage.setItem('accessMode', 'guest');
+            window.location.href = 'index.html';
+        });
+    }
+
+   // Logout Button
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        localStorage.clear(); // Clears accessMode and any cached session data
+        window.location.href = 'login.html';
+    });
+}
+
+    // Listen for Auth changes
+    supabase.auth.onAuthStateChange(() => {
+        checkAccess();
+    });
+
+    // Run Initial Check
+    checkAccess();
 });
+let slideIndex = 0;
+const slides = document.querySelectorAll('.achievement-slide');
+const dots = document.querySelectorAll('.dot');
+
+function showSlide(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    
+    slides[n].classList.add('active');
+    dots[n].classList.add('active');
+    slideIndex = n;
+}
+
+// Global function so the HTML "onclick" can find it
+window.currentSlide = function(n) {
+    showSlide(n);
+};
+
+// Auto-rotate every 6 seconds
+setInterval(() => {
+    slideIndex = (slideIndex + 1) % slides.length;
+    showSlide(slideIndex);
+}, 6000);
