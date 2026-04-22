@@ -94,5 +94,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="script.js"></script>
+<script>
+    // 1. Handle the "Free Version" (Guest) button
+    document.getElementById('guest-btn').addEventListener('click', () => {
+        // This gives them a "Guest Pass" in their browser memory
+        localStorage.setItem('accessMode', 'guest');
+        window.location.href = 'index.html'; 
+    });
+</script>
 </body>
 </html>
