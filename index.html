@@ -1,8 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <script>
+        /**
+         * PRE-RENDER GUARD
+         * This prevents "Flickering." It checks for access before the browser
+         * paints the background or projects.
+         */
+        (function() {
+            const isGuest = localStorage.getItem('accessMode') === 'guest';
+            // Check both cookies and localStorage for the Supabase session
+            const hasSession = document.cookie.includes('sb-access-token') || 
+                               localStorage.getItem('sb-auth-token'); 
+
+            if (!isGuest && !hasSession) {
+                // If no guest pass and no login session, redirect to login
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Njabulo Nkosi | Strategic Data Analyst</title>
@@ -13,7 +29,6 @@
 <body>
     <div class="main-glow-1"></div>
     <div class="main-glow-2"></div>
-
     <nav class="navbar">
         <div class="nav-logo">Njabulo | <span>Nkosi</span></div>
         <div class="menu-toggle" id="mobile-menu">
