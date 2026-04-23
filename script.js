@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+  
     // --- 2. THEME TOGGLE (Light/Dark) ---
     const toggleSwitch = document.querySelector('#checkbox');
     const currentTheme = localStorage.getItem('theme');
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSwitch.addEventListener('change', (e) => {
             const theme = e.target.checked ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+           localStorage.setItem('theme', theme);
         });
     }
 
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
+    // Inject Reveal CSS styles
     const style = document.createElement('style');
     style.innerHTML = `
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
@@ -65,33 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
+    // Apply reveal class to items
     document.querySelectorAll('section, .project-item, .skill-card').forEach(el => {
         el.classList.add('reveal');
         observer.observe(el);
     });
 
-    // --- 4. SECURITY & ACCESS LOGIC (THE FIX) ---
+    // --- 4. SECURITY & ACCESS LOGIC ---
     async function checkAccess() {
         const { data: { session } } = await supabase.auth.getSession();
         const isGuest = localStorage.getItem('accessMode') === 'guest';
         const path = window.location.pathname;
-        
-        // Detect if we are on the login page to prevent infinite loops
-        const isAtLoginPage = path.includes('login.html');
 
-        // A. If NOT logged in, NOT a guest, and NOT on login page -> Send to login
-        if (!session && !isGuest && !isAtLoginPage) {
+        // Redirect to login if no access
+        if (!session && !isGuest && !path.includes('login.html')) {
             window.location.href = 'login.html';
             return;
         }
 
-        // B. If ALREADY logged in and trying to access login page -> Send to index
-        if ((session || isGuest) && isAtLoginPage) {
-            window.location.href = 'index.html';
-            return;
-        }
-
-        // C. Project Visibility Logic (On index page)
+        // Project Visibility (index.html only)
         if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
             const privateProjects = document.querySelectorAll('.private-project');
             const greeting = document.getElementById('user-greeting');
@@ -113,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 5. BUTTON LISTENERS ---
-
+    
     // Login Button (GitHub)
     const loginBtn = document.getElementById('login-btn');
     if (loginBtn) {
@@ -121,10 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('accessMode'); // Clear guest flag
             await supabase.auth.signInWithOAuth({
                 provider: 'github',
-                options: { 
-                    redirectTo: window.location.origin + '/index.html',
-                    queryParams: { prompt: 'select_account' }
-                }
+                options: { redirectTo: window.location.origin + '/index.html',
+                    queryParams: {
+                    prompt: 'select_account'}
+                 }
             });
         });
     }
@@ -138,15 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Logout Button
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            localStorage.clear(); 
-            window.location.href = 'login.html';
-        });
-    }
+   // Logout Button
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        localStorage.clear(); // Clears accessMode and any cached session data
+        window.location.href = 'login.html';
+    });
+}
 
     // Listen for Auth changes
     supabase.auth.onAuthStateChange(() => {
@@ -156,14 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Run Initial Check
     checkAccess();
 });
-
-// --- 6. ACHIEVEMENT SLIDER ---
 let slideIndex = 0;
 const slides = document.querySelectorAll('.achievement-slide');
 const dots = document.querySelectorAll('.dot');
 
 function showSlide(n) {
-    if (slides.length === 0) return;
     slides.forEach(s => s.classList.remove('active'));
     dots.forEach(d => d.classList.remove('active'));
     
@@ -172,13 +163,13 @@ function showSlide(n) {
     slideIndex = n;
 }
 
+// Global function so the HTML "onclick" can find it
 window.currentSlide = function(n) {
     showSlide(n);
 };
 
-if (slides.length > 0) {
-    setInterval(() => {
-        slideIndex = (slideIndex + 1) % slides.length;
-        showSlide(slideIndex);
-    }, 6000);
-}
+// Auto-rotate every 6 seconds
+setInterval(() => {
+    slideIndex = (slideIndex + 1) % slides.length;
+    showSlide(slideIndex);
+}, 6000);
