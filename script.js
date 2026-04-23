@@ -143,13 +143,32 @@ if (logoutBtn) {
 }
 
     // Listen for Auth changes
-    supabase.auth.onAuthStateChange(() => {
+  // --- 6. AUTH STATE LISTENER ---
+    supabase.auth.onAuthStateChange((event, session) => {
+        console.log("Auth Event:", event); // This helps you debug in the console
+
+        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+            // 1. If they signed in officially, they aren't a "Guest" anymore
+            localStorage.removeItem('accessMode');
+
+            // 2. If they are still sitting on the login page, move them in!
+            if (window.location.pathname.includes('login.html')) {
+                window.location.href = 'index.html';
+            }
+        }
+        
+        if (event === 'SIGNED_OUT') {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Always run the visibility check (Member vs Guest projects)
         checkAccess();
     });
 
-    // Run Initial Check
+    // Run Initial Check immediately on load
     checkAccess();
-});
+    
 let slideIndex = 0;
 const slides = document.querySelectorAll('.achievement-slide');
 const dots = document.querySelectorAll('.dot');

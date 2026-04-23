@@ -7,17 +7,22 @@
          * This prevents "Flickering." It checks for access before the browser
          * paints the background or projects.
          */
-        (function() {
-            const isGuest = localStorage.getItem('accessMode') === 'guest';
-            // Check both cookies and localStorage for the Supabase session
-            const hasSession = document.cookie.includes('sb-access-token') || 
-                               localStorage.getItem('sb-auth-token'); 
+ (function() {
+    const isGuest = localStorage.getItem('accessMode') === 'guest';
+    // Check if the URL contains an access token from Supabase
+    const isReturningFromAuth = window.location.hash.includes('access_token') || 
+                                window.location.search.includes('code=');
 
-            if (!isGuest && !hasSession) {
-                // If no guest pass and no login session, redirect to login
-                window.location.href = 'login.html';
-            }
-        })();
+    // Check for the session
+    const hasSession = document.cookie.includes('sb-access-token') || 
+                       localStorage.getItem('sb-auth-token'); 
+
+    // ONLY redirect if we aren't a guest, don't have a session, 
+    // AND we aren't currently in the middle of a GitHub redirect.
+    if (!isGuest && !hasSession && !isReturningFromAuth) {
+        window.location.href = 'login.html';
+    }
+})();
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
