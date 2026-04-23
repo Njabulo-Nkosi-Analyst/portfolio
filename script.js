@@ -142,16 +142,15 @@ if (logoutBtn) {
     });
 }
 
-    // Listen for Auth changes
-  // --- 6. AUTH STATE LISTENER ---
+// --- 6. AUTH STATE LISTENER (The Fix) ---
     supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth Event:", event); // This helps you debug in the console
+        console.log("Auth Event:", event); // Check this in your F12 console
 
         if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-            // 1. If they signed in officially, they aren't a "Guest" anymore
+            // Remove guest mode flag since they are now a logged-in member
             localStorage.removeItem('accessMode');
 
-            // 2. If they are still sitting on the login page, move them in!
+            // If the user is currently on the login page, move them to the portfolio
             if (window.location.pathname.includes('login.html')) {
                 window.location.href = 'index.html';
             }
@@ -162,18 +161,26 @@ if (logoutBtn) {
             window.location.href = 'login.html';
         }
 
-        // Always run the visibility check (Member vs Guest projects)
+        // Re-run the visibility check for projects/greeting
         checkAccess();
     });
 
-    // Run Initial Check immediately on load
+    // Run Initial Check immediately on page load
     checkAccess();
-    
+
+}); // <--- THIS CLOSES YOUR DOMCONTENTLOADED BLOCK
+
+/**
+ * --- 7. ACHIEVEMENT SLIDER LOGIC ---
+ * Keep this outside the DOMContentLoaded or at the bottom to ensure global scope
+ */
 let slideIndex = 0;
 const slides = document.querySelectorAll('.achievement-slide');
 const dots = document.querySelectorAll('.dot');
 
 function showSlide(n) {
+    if (!slides.length) return; // Prevent errors if slides haven't loaded
+    
     slides.forEach(s => s.classList.remove('active'));
     dots.forEach(d => d.classList.remove('active'));
     
@@ -188,7 +195,9 @@ window.currentSlide = function(n) {
 };
 
 // Auto-rotate every 6 seconds
-setInterval(() => {
-    slideIndex = (slideIndex + 1) % slides.length;
-    showSlide(slideIndex);
-}, 6000);
+if (slides.length > 0) {
+    setInterval(() => {
+        slideIndex = (slideIndex + 1) % slides.length;
+        showSlide(slideIndex);
+    }, 6000);
+}
