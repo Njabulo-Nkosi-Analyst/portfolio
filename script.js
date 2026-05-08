@@ -1,203 +1,104 @@
-import { supabase } from './supabaseClient.js';
+const SUPABASE_URL = 'https://dlrkbpianpatztugqekd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WxaNOwW3TB6nnAYysChjGQ_sHJiDS6E';
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 1. MOBILE MENU ---
-    const menuToggle = document.querySelector('#mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
+let cart = JSON.parse(localStorage.getItem('my_green_cart')) || [];
 
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            if (icon) {
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            }
-        });
+// 1. UPDATE BANNER WITH FALLBACK
+async function fetchHero() {
+    const { data, error } = await db.from('banners').select('*').limit(1).single();
+    if (data && !error) {
+        document.getElementById('hero-banner').style.backgroundImage = `url('${data.image_url}')`;
+        document.getElementById('hero-data').innerHTML = `
+            <span class="badge">${data.promo_label || 'NEW ARRIVAL'}</span>
+            <h1>${data.title}</h1>
+            <p>${data.subtitle}</p>
+            <div class="hero-btns">
+                <button class="btn-primary">Shop Now</button>
+            </div>
+        `;
     }
-
-    // Close menu when clicking a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (navLinks) navLinks.classList.remove('active');
-            const icon = menuToggle?.querySelector('i');
-            if (icon) {
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
-            }
-        });
-    });
-
-  
-    // --- 2. THEME TOGGLE (Light/Dark) ---
-    const toggleSwitch = document.querySelector('#checkbox');
-    const currentTheme = localStorage.getItem('theme');
-
-    if (currentTheme) {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        if (currentTheme === 'light' && toggleSwitch) {
-            toggleSwitch.checked = true;
-        }
-    }
-
-    if (toggleSwitch) {
-        toggleSwitch.addEventListener('change', (e) => {
-            const theme = e.target.checked ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', theme);
-           localStorage.setItem('theme', theme);
-        });
-    }
-
-    // --- 3. SCROLL REVEAL ANIMATION ---
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-visible');
-            }
-        });
-    }, observerOptions);
-
-    // Inject Reveal CSS styles
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal-visible { opacity: 1 !important; transform: translateY(0) !important; }
-    `;
-    document.head.appendChild(style);
-
-    // Apply reveal class to items
-    document.querySelectorAll('section, .project-item, .skill-card').forEach(el => {
-        el.classList.add('reveal');
-        observer.observe(el);
-    });
-
-    // --- 4. SECURITY & ACCESS LOGIC ---
-    async function checkAccess() {
-        const { data: { session } } = await supabase.auth.getSession();
-        const isGuest = localStorage.getItem('accessMode') === 'guest';
-        const path = window.location.pathname;
-
-        // Redirect to login if no access
-        if (!session && !isGuest && !path.includes('login.html')) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        // Project Visibility (index.html only)
-        if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
-            const privateProjects = document.querySelectorAll('.private-project');
-            const greeting = document.getElementById('user-greeting');
-
-            if (session) {
-                // Member State
-                privateProjects.forEach(p => p.style.display = 'block');
-                if (greeting) {
-                    const name = session.user.user_metadata.full_name || 'Member';
-                    greeting.innerText = `Hi, ${name}`;
-                    greeting.style.display = 'inline-block';
-                }
-            } else {
-                // Guest State
-                privateProjects.forEach(p => p.style.display = 'none');
-                if (greeting) greeting.style.display = 'none';
-            }
-        }
-    }
-
-    // --- 5. BUTTON LISTENERS ---
-    
-    // Login Button (GitHub)
-    const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', async () => {
-            localStorage.removeItem('accessMode'); // Clear guest flag
-            await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: window.location.origin + '/index.html',
-                    queryParams: {
-                    prompt: 'select_account'}
-                 }
-            });
-        });
-    }
-
-    // Guest Button
-    const guestBtn = document.getElementById('guest-btn');
-    if (guestBtn) {
-        guestBtn.addEventListener('click', () => {
-            localStorage.setItem('accessMode', 'guest');
-            window.location.href = 'index.html';
-        });
-    }
-
-   // Logout Button
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        localStorage.clear(); // Clears accessMode and any cached session data
-        window.location.href = 'login.html';
-    });
 }
 
-// --- 6. AUTH STATE LISTENER (The Fix) ---
-    supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth Event:", event); // Check this in your F12 console
-
-        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-            // Remove guest mode flag since they are now a logged-in member
-            localStorage.removeItem('accessMode');
-
-            // If the user is currently on the login page, move them to the portfolio
-            if (window.location.pathname.includes('login.html')) {
-                window.location.href = 'index.html';
-            }
-        }
-        
-        if (event === 'SIGNED_OUT') {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        }
-
-        // Re-run the visibility check for projects/greeting
-        checkAccess();
-    });
-
-    // Run Initial Check immediately on page load
-    checkAccess();
-
-}); // <--- THIS CLOSES YOUR DOMCONTENTLOADED BLOCK
-
-/**
- * --- 7. ACHIEVEMENT SLIDER LOGIC ---
- * Keep this outside the DOMContentLoaded or at the bottom to ensure global scope
- */
-let slideIndex = 0;
-const slides = document.querySelectorAll('.achievement-slide');
-const dots = document.querySelectorAll('.dot');
-
-function showSlide(n) {
-    if (!slides.length) return; // Prevent errors if slides haven't loaded
-    
-    slides.forEach(s => s.classList.remove('active'));
-    dots.forEach(d => d.classList.remove('active'));
-    
-    slides[n].classList.add('active');
-    dots[n].classList.add('active');
-    slideIndex = n;
+// 2. FETCH CATEGORIES
+async function fetchCategories() {
+    const { data } = await db.from('categories').select('*');
+    const list = document.getElementById('category-list');
+    if (data) {
+        let html = `<div class="pill active" onclick="filterCat('all', this)">All Products</div>`;
+        html += data.map(c => `<div class="pill" onclick="filterCat(${c.id}, this)">${c.name}</div>`).join('');
+        list.innerHTML = html;
+    }
 }
 
-// Global function so the HTML "onclick" can find it
-window.currentSlide = function(n) {
-    showSlide(n);
+// 3. FETCH PRODUCTS
+async function fetchProducts(catId = 'all', search = '') {
+    let query = db.from('products').select('*');
+    if (catId !== 'all') query = query.eq('category_id', catId);
+    if (search) query = query.ilike('name', `%${search}%`);
+
+    const { data } = await query;
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = data.map(p => `
+        <div class="card">
+            <img src="${p.image_url}" onerror="this.src='https://via.placeholder.com/200?text=Fresh+Product'">
+            <p style="font-size:11px; color:#aaa; text-transform:uppercase;">${p.category_name || 'Produce'}</p>
+            <h4>${p.name}</h4>
+            <p class="price">R${p.price.toFixed(2)}</p>
+            <button class="add-btn" onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image_url}')">
+                <i data-lucide="plus"></i> Add to Bag
+            </button>
+        </div>
+    `).join('');
+    lucide.createIcons();
+}
+
+// 4. LOGIC
+window.filterCat = (id, el) => {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    fetchProducts(id);
 };
 
-// Auto-rotate every 6 seconds
-if (slides.length > 0) {
-    setInterval(() => {
-        slideIndex = (slideIndex + 1) % slides.length;
-        showSlide(slideIndex);
-    }, 6000);
+document.getElementById('global-search').addEventListener('input', (e) => {
+    fetchProducts('all', e.target.value);
+});
+
+window.addToCart = (id, name, price, img) => {
+    const item = cart.find(i => i.id === id);
+    if (item) item.qty++;
+    else cart.push({ id, name, price, img, qty: 1 });
+    updateCart();
+};
+
+function updateCart() {
+    localStorage.setItem('my_green_cart', JSON.stringify(cart));
+    document.getElementById('cart-count').innerText = cart.reduce((a, b) => a + b.qty, 0);
+    renderCart();
 }
+
+function renderCart() {
+    const itemsCont = document.getElementById('cart-items');
+    let total = 0;
+    itemsCont.innerHTML = cart.map(i => {
+        total += i.price * i.qty;
+        return `<div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+            <img src="${i.img}" style="width:50px; border-radius:10px;">
+            <div style="flex:1"><b>${i.name}</b><br>R${i.price} x ${i.qty}</div>
+        </div>`;
+    }).join('');
+    document.getElementById('cart-total').innerText = `R${total.toFixed(2)}`;
+}
+
+// UI Toggles
+document.getElementById('cart-btn').onclick = () => document.getElementById('cart-sidebar').classList.add('active');
+document.getElementById('close-cart').onclick = () => document.getElementById('cart-sidebar').classList.remove('active');
+
+// INIT
+async function start() {
+    await fetchHero();
+    await fetchCategories();
+    await fetchProducts();
+    updateCart();
+}
+start();
