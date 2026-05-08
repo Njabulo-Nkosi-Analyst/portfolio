@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close menu when clicking a link
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             if (navLinks) navLinks.classList.remove('active');
@@ -29,8 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-  
-    // --- 2. THEME TOGGLE (Light/Dark) ---
+    // --- 2. THEME TOGGLE ---
     const toggleSwitch = document.querySelector('#checkbox');
     const currentTheme = localStorage.getItem('theme');
 
@@ -45,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSwitch.addEventListener('change', (e) => {
             const theme = e.target.checked ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', theme);
-           localStorage.setItem('theme', theme);
+            localStorage.setItem('theme', theme);
         });
     }
 
-    // --- 3. SCROLL REVEAL ANIMATION ---
+    // --- 3. SCROLL REVEAL ---
     const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -59,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Inject Reveal CSS styles
     const style = document.createElement('style');
     style.innerHTML = `
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
@@ -67,90 +64,87 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
-    // Apply reveal class to items
     document.querySelectorAll('section, .project-item, .skill-card').forEach(el => {
         el.classList.add('reveal');
         observer.observe(el);
     });
 
-    // --- 4. SECURITY & ACCESS LOGIC ---
+    // --- 4. HYBRID PROJECT FETCH (The New Feature) ---
+    async function loadNewProjects() {
+        const container = document.getElementById('dynamic-projects-container');
+        if (!container) return;
+
+        try {
+            const { data: newProjects, error } = await supabase
+                .from('projects')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            container.innerHTML = ''; // Clear to prevent duplicates
+
+            if (newProjects && newProjects.length > 0) {
+                newProjects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'project-card reveal';
+                    projectCard.innerHTML = `
+                        <div class="project-content">
+                            <span class="badge" style="background: #00d2ff; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">NEW</span>
+                            <h3>${project.title}</h3>
+                            <p>${project.description || ''}</p>
+                            <div class="hero-btns">
+                                <a href="${project.project_url || '#'}" target="_blank" class="btn primary" style="padding: 8px 15px; font-size: 0.8rem;">View Project</a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(projectCard);
+                    observer.observe(projectCard); // Apply scroll reveal to new items
+                });
+            }
+        } catch (err) {
+            console.warn("Project fetch notice:", err.message);
+        }
+    }
+
+    // --- 5. SECURITY & ACCESS LOGIC ---
     async function checkAccess() {
         const { data: { session } } = await supabase.auth.getSession();
         const isGuest = localStorage.getItem('accessMode') === 'guest';
         const path = window.location.pathname;
 
-        // Redirect to login if no access
         if (!session && !isGuest && !path.includes('login.html')) {
             window.location.href = 'login.html';
             return;
         }
 
-        // Project Visibility (index.html only)
         if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
             const privateProjects = document.querySelectorAll('.private-project');
             const greeting = document.getElementById('user-greeting');
+            const logoutBtn = document.getElementById('logout-btn');
 
             if (session) {
-                // Member State
                 privateProjects.forEach(p => p.style.display = 'block');
                 if (greeting) {
                     const name = session.user.user_metadata.full_name || 'Member';
                     greeting.innerText = `Hi, ${name}`;
                     greeting.style.display = 'inline-block';
                 }
+                if (logoutBtn) logoutBtn.style.display = 'block';
             } else {
-                // Guest State
                 privateProjects.forEach(p => p.style.display = 'none');
                 if (greeting) greeting.style.display = 'none';
+                if (logoutBtn && isGuest) logoutBtn.style.display = 'none';
             }
         }
     }
 
-    // --- 5. BUTTON LISTENERS ---
-    
-    // Login Button (GitHub)
-    const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', async () => {
-            localStorage.removeItem('accessMode'); // Clear guest flag
-            await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: window.location.origin + '/index.html',
-                    queryParams: {
-                    prompt: 'select_account'}
-                 }
-            });
-        });
-    }
-
-    // Guest Button
-    const guestBtn = document.getElementById('guest-btn');
-    if (guestBtn) {
-        guestBtn.addEventListener('click', () => {
-            localStorage.setItem('accessMode', 'guest');
-            window.location.href = 'index.html';
-        });
-    }
-
-   // Logout Button
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        localStorage.clear(); // Clears accessMode and any cached session data
-        window.location.href = 'login.html';
-    });
-}
-
-// --- 6. AUTH STATE LISTENER (The Fix) ---
+    // --- 6. AUTH STATE LISTENER ---
     supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth Event:", event); // Check this in your F12 console
+        console.log("Auth Event:", event);
 
         if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-            // Remove guest mode flag since they are now a logged-in member
             localStorage.removeItem('accessMode');
-
-            // If the user is currently on the login page, move them to the portfolio
             if (window.location.pathname.includes('login.html')) {
                 window.location.href = 'index.html';
             }
@@ -161,40 +155,63 @@ if (logoutBtn) {
             window.location.href = 'login.html';
         }
 
-        // Re-run the visibility check for projects/greeting
         checkAccess();
+        loadNewProjects();
     });
 
-    // Run Initial Check immediately on page load
+    // --- 7. BUTTON LISTENERS ---
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            localStorage.removeItem('accessMode');
+            await supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: { redirectTo: window.location.origin + '/index.html' }
+            });
+        });
+    }
+
+    const guestBtn = document.getElementById('guest-btn');
+    if (guestBtn) {
+        guestBtn.addEventListener('click', () => {
+            localStorage.setItem('accessMode', 'guest');
+            window.location.href = 'index.html';
+        });
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+    }
+
+    // Initial Runs
     checkAccess();
+    loadNewProjects();
 
-}); // <--- THIS CLOSES YOUR DOMCONTENTLOADED BLOCK
+}); // END DOMCONTENTLOADED
 
-/**
- * --- 7. ACHIEVEMENT SLIDER LOGIC ---
- * Keep this outside the DOMContentLoaded or at the bottom to ensure global scope
- */
+// --- 8. ACHIEVEMENT SLIDER LOGIC ---
 let slideIndex = 0;
 const slides = document.querySelectorAll('.achievement-slide');
 const dots = document.querySelectorAll('.dot');
 
 function showSlide(n) {
-    if (!slides.length) return; // Prevent errors if slides haven't loaded
-    
+    if (!slides.length) return;
     slides.forEach(s => s.classList.remove('active'));
     dots.forEach(d => d.classList.remove('active'));
-    
-    slides[n].classList.add('active');
-    dots[n].classList.add('active');
+    if (slides[n]) slides[n].classList.add('active');
+    if (dots[n]) dots[n].classList.add('active');
     slideIndex = n;
 }
 
-// Global function so the HTML "onclick" can find it
 window.currentSlide = function(n) {
     showSlide(n);
 };
 
-// Auto-rotate every 6 seconds
 if (slides.length > 0) {
     setInterval(() => {
         slideIndex = (slideIndex + 1) % slides.length;
