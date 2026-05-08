@@ -140,44 +140,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 6. AUTH STATE LISTENER ---
-    supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth Event:", event);
-
-        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-            localStorage.removeItem('accessMode');
-            if (window.location.pathname.includes('login.html')) {
-                window.location.href = 'index.html';
-            }
-        }
-        
-        if (event === 'SIGNED_OUT') {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        }
+   supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && window.location.pathname.includes('login.html')) {
+        window.location.href = 'index.html';
+    } else if (event === 'SIGNED_OUT') {
+        window.location.href = 'login.html';
+    }
 
         checkAccess();
-        loadNewProjects();
+      loadNewProjects();
     });
 
     // --- 7. BUTTON LISTENERS ---
-    const loginBtn = document.getElementById('login-btn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', async () => {
-            localStorage.removeItem('accessMode');
-            await supabase.auth.signInWithOAuth({
+  // --- 7. BUTTON LISTENERS ---
+const loginBtn = document.getElementById('login-btn');
+if (loginBtn) {
+    loginBtn.addEventListener('click', async () => {
+        localStorage.removeItem('accessMode');
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'github',
                 options: { redirectTo: window.location.origin + '/index.html' }
             });
-        });
-    }
+            if (error) throw error;
+        } catch (err) {
+            console.error("Login Error:", err.message);
+            alert("Login failed: " + err.message);
+        }
+    });
+}
 
-    const guestBtn = document.getElementById('guest-btn');
-    if (guestBtn) {
-        guestBtn.addEventListener('click', () => {
-            localStorage.setItem('accessMode', 'guest');
-            window.location.href = 'index.html';
-        });
-    }
+const guestBtn = document.getElementById('guest-btn');
+if (guestBtn) {
+    guestBtn.addEventListener('click', () => {
+        localStorage.setItem('accessMode', 'guest');
+        window.location.href = 'index.html';
+    });
+}
 
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
