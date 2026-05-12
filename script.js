@@ -129,20 +129,23 @@ async function checkAccess() {
     const greeting = document.getElementById('user-greeting');
     const logoutBtn = document.getElementById('logout-btn');
 
-    if (session) {
-        privateProjects.forEach(p => p.style.display = 'block');
-        if (greeting) {
-            const name = session.user.user_metadata.full_name || session.user.email || 'Member';
-            greeting.innerText = `Hi, ${name}`;
-            greeting.style.display = 'inline-block';
-        }
-        if (logoutBtn) logoutBtn.style.display = 'inline-block';
-    } else {
-        // Guest mode
-        privateProjects.forEach(p => p.style.display = 'none');
-        if (greeting) greeting.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'none';
+  if (session) {
+    privateProjects.forEach(p => p.style.display = 'block');
+    if (greeting) {
+        const name = session.user.user_metadata.full_name || session.user.email || 'Member';
+        greeting.innerText = `Hi, ${name}`;
+        greeting.style.display = 'inline-block';
     }
+    if (logoutBtn) logoutBtn.style.display = 'inline-block';
+} else if (isGuest) {
+    // Guest — hide private projects but SHOW logout button
+    privateProjects.forEach(p => p.style.display = 'none');
+    if (greeting) {
+        greeting.innerText = 'Guest';
+        greeting.style.display = 'inline-block';
+    }
+    if (logoutBtn) logoutBtn.style.display = 'inline-block'; // ← this was missing
+}
 }
 
     // --- 6. AUTH STATE LISTENER ---
@@ -182,20 +185,20 @@ if (loginBtn) {
 const guestBtn = document.getElementById('guest-btn');
 if (guestBtn) {
     guestBtn.addEventListener('click', (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         localStorage.setItem('accessMode', 'guest');
-        window.location.href = 'index.html'; // Move to portfolio
+        window.location.href = 'index.html';
     });
 }
 
     const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            localStorage.clear();
-            window.location.href = 'login.html';
-        });
-    }
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        localStorage.clear(); // clears guest mode AND supabase session
+        await supabase.auth.signOut();
+        window.location.href = 'login.html';
+    });
+}
 
     // Initial Runs
     checkAccess();
