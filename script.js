@@ -167,13 +167,14 @@ if (loginBtn) {
     loginBtn.addEventListener('click', async (e) => {
         e.preventDefault(); // This stops the "glitch" refresh
         
-       const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
-        redirectTo: 'https://njabulo-nkosi-analysts.vercel.app/index.html'
+        // Using window.location.origin makes it work on both local and Vercel
+        redirectTo: window.location.origin + '/index.html',
+        flowType: 'pkce' 
     }
 });
-
         if (error) {
             console.error("Login failed:", error.message);
             alert("Check your Supabase Dashboard settings!");

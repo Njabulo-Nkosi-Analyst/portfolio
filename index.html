@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
+ <script>
     (function() {
         const isGuest = localStorage.getItem('accessMode') === 'guest';
-        const hasSession = Object.keys(localStorage).some(key => key.includes('supabase'));
-        
+        const hasSession = localStorage.getItem('supabase-auth') !== null;
+
         if (!isGuest && !hasSession) {
             window.location.href = 'login.html';
         }
