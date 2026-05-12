@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <script>
-        // REDIRECT GUARD: If they are already a Guest or Member, send them straight to the dashboard
-        (function() {
-            const isGuest = localStorage.getItem('accessMode') === 'guest';
-            const hasSession = document.cookie.includes('sb-access-token') || 
-                               localStorage.getItem('sb-auth-token'); 
-
-            if (isGuest || hasSession) {
-                window.location.href = 'login.html';
-            }
-        })();
-    </script>
+    (function() {
+        const isGuest = localStorage.getItem('accessMode') === 'guest';
+        const hasSession = Object.keys(localStorage).some(key => key.includes('supabase'));
+        
+        // If already logged in, skip login page
+        if (isGuest || hasSession) {
+            window.location.href = 'index.html';
+        }
+    })();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Portfolio | Njabulo Peter Nkosi</title>
@@ -105,6 +104,6 @@
         </div> 
     </main>
 
- <script type="module" src="script.js"></script>
+ <script type="module" src="./script.js"></script>
 </body>
 </html>

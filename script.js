@@ -108,36 +108,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 5. SECURITY & ACCESS LOGIC ---
-    async function checkAccess() {
-        const { data: { session } } = await supabase.auth.getSession();
-        const isGuest = localStorage.getItem('accessMode') === 'guest';
-        const path = window.location.pathname;
+async function checkAccess() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const isGuest = localStorage.getItem('accessMode') === 'guest';
 
-        if (!session && !isGuest && !path.includes('login.html')) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
-            const privateProjects = document.querySelectorAll('.private-project');
-            const greeting = document.getElementById('user-greeting');
-            const logoutBtn = document.getElementById('logout-btn');
-
-            if (session) {
-                privateProjects.forEach(p => p.style.display = 'block');
-                if (greeting) {
-                    const name = session.user.user_metadata.full_name || 'Member';
-                    greeting.innerText = `Hi, ${name}`;
-                    greeting.style.display = 'inline-block';
-                }
-                if (logoutBtn) logoutBtn.style.display = 'block';
-            } else {
-                privateProjects.forEach(p => p.style.display = 'none');
-                if (greeting) greeting.style.display = 'none';
-                if (logoutBtn && isGuest) logoutBtn.style.display = 'none';
-            }
-        }
+    // If on login page, redirect away if already logged in
+    if (window.location.pathname.includes('login')) {
+        if (session || isGuest) window.location.href = 'index.html';
+        return;
     }
+
+    // On portfolio page — guard access
+    if (!session && !isGuest) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Show/hide content based on session
+    const privateProjects = document.querySelectorAll('.private-project');
+    const greeting = document.getElementById('user-greeting');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (session) {
+        privateProjects.forEach(p => p.style.display = 'block');
+        if (greeting) {
+            const name = session.user.user_metadata.full_name || session.user.email || 'Member';
+            greeting.innerText = `Hi, ${name}`;
+            greeting.style.display = 'inline-block';
+        }
+        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    } else {
+        // Guest mode
+        privateProjects.forEach(p => p.style.display = 'none');
+        if (greeting) greeting.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+}
 
     // --- 6. AUTH STATE LISTENER ---
    supabase.auth.onAuthStateChange((event, session) => {
@@ -152,29 +158,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 7. BUTTON LISTENERS ---
-  // --- 7. BUTTON LISTENERS ---
+// --- GITHUB LOGIN ---
 const loginBtn = document.getElementById('login-btn');
 if (loginBtn) {
-    loginBtn.addEventListener('click', async () => {
-        localStorage.removeItem('accessMode');
-        try {
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: window.location.origin + '/index.html' }
-            });
-            if (error) throw error;
-        } catch (err) {
-            console.error("Login Error:", err.message);
-            alert("Login failed: " + err.message);
+    loginBtn.addEventListener('click', async (e) => {
+        e.preventDefault(); // This stops the "glitch" refresh
+        
+       const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+        redirectTo: 'https://njabulo-nkosi-analysts.vercel.app/index.html'
+    }
+});
+
+        if (error) {
+            console.error("Login failed:", error.message);
+            alert("Check your Supabase Dashboard settings!");
         }
     });
 }
 
+// --- FREE VERSION (GUEST) ---
 const guestBtn = document.getElementById('guest-btn');
 if (guestBtn) {
-    guestBtn.addEventListener('click', () => {
+    guestBtn.addEventListener('click', (e) => {
+        e.preventDefault(); 
         localStorage.setItem('accessMode', 'guest');
-        window.location.href = 'index.html';
+        window.location.href = 'index.html'; // Move to portfolio
     });
 }
 
