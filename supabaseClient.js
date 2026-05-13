@@ -5,9 +5,7 @@ const supabaseKey = 'sb_publishable_0ZB23W5Ni4cogAzKpd5Uyg_R38i_KAP';
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
-        storage: window.localStorage,
-        storageKey: 'supabase-auth',
-        flowType: 'pkce',        // ← more secure, fixes tracking prevention
+        flowType: 'pkce',
         detectSessionInUrl: true,
         persistSession: true,
         autoRefreshToken: true,

@@ -1,5 +1,23 @@
 import { supabase } from './supabaseClient.js';
 
+// --- HANDLE OAUTH CALLBACK FIRST (before DOMContentLoaded) ---
+(async () => {
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+
+    if (code) {
+        try {
+            const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+            if (error) throw error;
+            window.history.replaceState({}, document.title, '/index.html');
+            window.location.href = '/index.html';
+        } catch (err) {
+            console.error('Code exchange failed:', err.message);
+            window.location.href = '/login.html';
+        }
+        return; // Stop everything else
+    }
+})();
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. MOBILE MENU ---
@@ -149,35 +167,46 @@ async function checkAccess() {
 }
 
     // --- 6. AUTH STATE LISTENER ---
-   supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && window.location.pathname.includes('login.html')) {
-        window.location.href = 'index.html';
+ supabase.auth.onAuthStateChange(async (event, session) => {
+    console.log('Auth event:', event);
+    console.log('Session exists:', !!session);
+
+    if (session) {
+        // 1. Success! Clear any old guest data
+        localStorage.removeItem('accessMode');
+
+        // 2. If we are currently on the login page, move to the dashboard
+        if (window.location.pathname.includes('login.html') || window.location.pathname === '/') {
+            window.location.href = 'index.html';
+        } else {
+            // 3. If we are already on index.html, just refresh the data
+            checkAccess();
+            if (typeof loadNewProjects === "function") loadNewProjects();
+        }
     } else if (event === 'SIGNED_OUT') {
+        // 4. Handle logout
+        localStorage.removeItem('accessMode');
         window.location.href = 'login.html';
-    }
-
+    } else {
+        // 5. This handles the 'INITIAL_SESSION' when nobody is logged in
         checkAccess();
-      loadNewProjects();
-    });
-
+    }
+});
     // --- 7. BUTTON LISTENERS ---
 // --- GITHUB LOGIN ---
 const loginBtn = document.getElementById('login-btn');
 if (loginBtn) {
     loginBtn.addEventListener('click', async (e) => {
-        e.preventDefault(); // This stops the "glitch" refresh
-        
-    const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-        // Using window.location.origin makes it work on both local and Vercel
-        redirectTo: window.location.origin + '/index.html',
-        flowType: 'pkce' 
-    }
-});
+        e.preventDefault();
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+                redirectTo: 'https://njabulo-nkosi-analysts.vercel.app/index.html'
+            }
+        });
         if (error) {
             console.error("Login failed:", error.message);
-            alert("Check your Supabase Dashboard settings!");
+            alert("Login failed: " + error.message);
         }
     });
 }

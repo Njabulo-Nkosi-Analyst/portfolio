@@ -260,5 +260,16 @@
     </footer>
   
  <script type="module" src="./script.js"></script>
+ <script>
+        window.onload = () => {
+            // Give the PKCE exchange half a second to finish before checking access
+            setTimeout(() => {
+                // If checkAccess is defined in your script.js, it will run now
+                if (typeof checkAccess === "function") {
+                    checkAccess();
+                }
+            }, 500);
+        };
+    </script>
 </body>
 </html>
