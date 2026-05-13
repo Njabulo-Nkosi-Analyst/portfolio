@@ -1,5 +1,12 @@
 import { supabase } from './supabaseClient.js';
 
+// --- GLOBAL LOGOUT (called directly from onclick in index.html) ---
+window.handleLogout = async function() {
+    localStorage.clear();
+    await supabase.auth.signOut();
+    window.location.href = 'login.html';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. MOBILE MENU ---
@@ -27,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // ... rest of your code unchanged
 
     // --- 2. THEME TOGGLE ---
     const toggleSwitch = document.querySelector('#checkbox');
