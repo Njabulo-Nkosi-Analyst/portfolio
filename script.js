@@ -1,23 +1,5 @@
 import { supabase } from './supabaseClient.js';
 
-// --- HANDLE OAUTH CALLBACK FIRST (before DOMContentLoaded) ---
-(async () => {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get('code');
-
-    if (code) {
-        try {
-            const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-            if (error) throw error;
-            window.history.replaceState({}, document.title, '/index.html');
-            window.location.href = '/index.html';
-        } catch (err) {
-            console.error('Code exchange failed:', err.message);
-            window.location.href = '/login.html';
-        }
-        return; // Stop everything else
-    }
-})();
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. MOBILE MENU ---
@@ -167,28 +149,21 @@ async function checkAccess() {
 }
 
     // --- 6. AUTH STATE LISTENER ---
- supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log('Auth event:', event);
-    console.log('Session exists:', !!session);
+supabase.auth.onAuthStateChange(async (event, session) => {
+    console.log('Auth event:', event, '| Session:', !!session);
 
-    if (session) {
-        // 1. Success! Clear any old guest data
+    if (event === 'SIGNED_IN' && session) {
         localStorage.removeItem('accessMode');
+        // Clean the URL then stay on index
+        window.history.replaceState({}, document.title, '/index.html');
+        checkAccess();
+        loadNewProjects();
 
-        // 2. If we are currently on the login page, move to the dashboard
-        if (window.location.pathname.includes('login.html') || window.location.pathname === '/') {
-            window.location.href = 'index.html';
-        } else {
-            // 3. If we are already on index.html, just refresh the data
-            checkAccess();
-            if (typeof loadNewProjects === "function") loadNewProjects();
-        }
     } else if (event === 'SIGNED_OUT') {
-        // 4. Handle logout
-        localStorage.removeItem('accessMode');
+        localStorage.clear();
         window.location.href = 'login.html';
+
     } else {
-        // 5. This handles the 'INITIAL_SESSION' when nobody is logged in
         checkAccess();
     }
 });

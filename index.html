@@ -3,8 +3,12 @@
 <head>
  <script>
     (function() {
+        // If there's a code in the URL, let it through — Supabase needs to process it
+        const hasCode = window.location.search.includes('code=');
+        if (hasCode) return; // Don't redirect, let script.js handle it
+
         const isGuest = localStorage.getItem('accessMode') === 'guest';
-        const hasSession = localStorage.getItem('supabase-auth') !== null;
+        const hasSession = Object.keys(localStorage).some(key => key.includes('supabase'));
 
         if (!isGuest && !hasSession) {
             window.location.href = 'login.html';

@@ -6,8 +6,9 @@ const supabaseKey = 'sb_publishable_0ZB23W5Ni4cogAzKpd5Uyg_R38i_KAP';
 export const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
         flowType: 'pkce',
-        detectSessionInUrl: true,
+        detectSessionInUrl: true,  // ← Supabase will auto-exchange the code
         persistSession: true,
         autoRefreshToken: true,
+        storage: window.localStorage
     }
 });
